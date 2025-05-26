@@ -1,0 +1,21 @@
+
+
+
+CREATE PROCEDURE GetCategories
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        CategoryID,
+        CategoryName,
+        CategoryDescription,
+        CategoryImage,
+        SortOrder,
+        IsActive,
+		0 As IdEdit
+    FROM Categories
+    ORDER BY SortOrder; -- Optional: you can change or remove this as needed
+END;
+
+

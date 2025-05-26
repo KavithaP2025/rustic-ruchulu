@@ -1,0 +1,24 @@
+﻿
+
+
+CREATE PROCEDURE DeleteUserAddress
+    @AddressID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Check if the AddressID exists
+    IF EXISTS (SELECT 1 FROM UserAddress WHERE AddressID = @AddressID)
+    BEGIN
+        DELETE FROM UserAddress
+        WHERE AddressID = @AddressID;
+
+        SELECT 'Address deleted successfully.' AS Message, 'Success' AS Status;
+    END
+    ELSE
+    BEGIN
+        SELECT 'Address not found.' AS Message, 'Warning' AS Status;
+    END
+END;
+
+

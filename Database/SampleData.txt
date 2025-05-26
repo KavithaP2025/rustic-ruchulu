@@ -1,0 +1,91 @@
+INSERT INTO Categories (CategoryName, CategoryDescription, CategoryImage,SortOrder, IsActive)
+VALUES 
+('Cashew', 'Cashew sub title - description', './img/pista.jpg',1, 1),
+('Snacks', 'Snacks sub title - description', './img/pista.jpg',2, 1),
+('Honey', 'Honey sub title - description', './img/pista.jpg',3, 1),
+('Spices', 'Spices sub title - description', './img/pista.jpg',4, 1),
+('Podulu', 'Podulu categories will add soon.', './img/pista.jpg',5, 1),
+('Veg pickles', 'Veg pickles categories will add soon.', './img/pista.jpg',6, 1),
+('Non veg pickles', 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson...', './img/pista.jpg',7, 1),
+('Dry sea food', 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson...', './img/pista.jpg',8, 1),
+('Dry fish', 'Dry fish categories will add soon.', './img/pista.jpg',9, 1),
+('Ghee', 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson...', './img/pista.jpg',10, 1),
+('Appadalu', 'Nihil anim keffiyeh helvetica, craft beer labore wes anderson...', './img/pista.jpg',11, 1);
+
+
+
+
+INSERT INTO Tags (TagName, Quantity) 
+VALUES ('500g', 0.5), ('1kg', 1), ('1.5kg', 1.5);
+
+INSERT INTO ItemTags (ItemID, TagID) 
+VALUES 
+(1, 1), (1, 2),
+(2, 1), (2, 2), (2, 3),
+(3, 1), (3, 2), (3, 3),
+(4, 1), (4, 2), (4, 3),
+(5, 1), (5, 2),
+(6, 1), (6, 2), (6, 3),
+(7, 1), (7, 3),
+(8, 1), (8, 2), (8, 3),
+(9, 1), (9, 2), (9, 3),
+(10, 1), (10, 2), (10, 3),
+(11, 1), (11, 2), (11, 3),
+(12, 1), (12, 2), (12, 3),
+(13, 1), (13, 2), (13, 3),
+(14, 1), (14, 2), (14, 3),
+(15, 1), (15, 2), (15, 3),
+(16, 1), (16, 2), (16, 3),
+(17, 1), (17, 2), (17, 3),
+(18, 1), (18, 2), (18, 3),
+(19, 1), (19, 2), (19, 3),
+(20, 1), (20, 2);
+
+
+
+-- Insert into Items table
+INSERT INTO Items (CategoryID, ItemName, ItemDescription, OriginalPrice, DiscountPercentage, Image)
+VALUES
+-- Cashew Items
+(1, 'King Cashew', 'King Cashew description', 150, 10, './img/pista.jpg'),
+(1, 'Jumbo Cashew', 'Large-sized cashews, perfect for gifting and snacking.', 180, 12, './img/pista.jpg'),
+(1, 'Popular Choice', 'A handpicked selection of cashews, preferred by most customers.', 140, 8, './img/pista.jpg'),
+(1, 'Most Commonly Sold Online', 'Cashews that are the best sellers in online marketplaces.', 160, 10, './img/pista.jpg'),
+
+-- Snacks Items
+(2, 'Kaju Masala', 'Spicy and flavorful masala-coated cashews.', 175, 10, './img/pista.jpg'),
+(2, 'Mandhasa Cova', 'Traditional Indian sweet made with rich ingredients.', 200, 15, './img/pista.jpg'),
+
+-- Honey Items
+(3, 'Raw Forest Honey', 'Pure and organic honey sourced from deep forests.', 300, 20, './img/pista.jpg'),
+
+-- Spices Items
+(4, 'Dried Red Chilli', 'Premium quality dried red chillies with an intense flavor.', 120, 5, './img/pista.jpg'),
+(4, 'Chilli Powder', 'Finely ground red chilli powder for spice lovers.', 130, 7, './img/pista.jpg'),
+(4, 'Turmeric Powder', 'Fresh and organic turmeric powder for cooking and health benefits.', 110, 6, './img/pista.jpg'),
+
+-- Podulu Items
+(5, 'Podulu', 'Premium quality dried red chillies with an intense flavor.', 120, 5, './img/pista.jpg'),
+
+-- Veg Pickles Items
+(6, 'Mango Pickle', 'Spicy and tangy homemade Mango pickle.', 250, 10, './img/pista.jpg'),
+
+-- Non-Veg Pickles Items
+(7, 'Chicken Pickle', 'Spicy and tangy homemade chicken pickle.', 250, 10, './img/pista.jpg'),
+(7, 'Prawns Pickle', 'Delicious prawns pickle with authentic spices.', 270, 12, './img/pista.jpg'),
+
+-- Dry Seafood Items
+(8, 'Royya Pottu', 'Dried shrimp, a delicacy for seafood lovers.', 220, 10, './img/pista.jpg'),
+(8, 'Dry Netthalu', 'Traditional dried anchovies, packed with protein.', 190, 8, './img/pista.jpg'),
+(8, 'Dry Prawns with Head', 'Sun-dried prawns with head intact for rich seafood flavors.', 230, 9, './img/pista.jpg'),
+
+-- Dry fish Items
+(9, 'Dry fish', 'Pure desi cow ghee, rich in taste and nutrition.', 400, 15, './img/pista.jpg'),
+
+-- Ghee Items
+(10, 'Cow Ghee', 'Pure desi cow ghee, rich in taste and nutrition.', 400, 15, './img/pista.jpg'),
+
+-- Appadalu Items
+(11, 'Appadalu', 'Crispy traditional South Indian papads.', 100, 5, './img/pista.jpg');
+
+

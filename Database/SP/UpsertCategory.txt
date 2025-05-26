@@ -1,0 +1,49 @@
+﻿
+
+
+CREATE PROCEDURE UpsertCategory
+    @CategoryID INT = NULL, -- optional, only needed for update
+    @CategoryName NVARCHAR(100),
+    @CategoryDescription NVARCHAR(MAX),
+    @CategoryImage NVARCHAR(MAX),
+    @SortOrder INT,
+    @IsActive BIT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (SELECT 1 FROM Categories WHERE CategoryID = @CategoryID)
+    BEGIN
+        -- Update existing record
+        UPDATE Categories
+        SET 
+            CategoryName = @CategoryName,
+            CategoryDescription = @CategoryDescription,
+            CategoryImage = @CategoryImage,
+            SortOrder = @SortOrder,
+            IsActive = @IsActive
+        WHERE CategoryID = @CategoryID;
+
+		SELECT 'Category updated successfully.' AS Message, 'Success' AS Status;
+    END
+    ELSE
+    BEGIN
+        -- Insert new record without specifying CategoryID
+        INSERT INTO Categories (
+            CategoryName,
+            CategoryDescription,
+            CategoryImage,
+            SortOrder,
+            IsActive
+        )
+        VALUES (
+            @CategoryName,
+            @CategoryDescription,
+            @CategoryImage,
+            @SortOrder,
+            @IsActive
+        );
+
+		SELECT 'Category added successfully.' AS Message, 'Success' AS Status;
+    END
+END;

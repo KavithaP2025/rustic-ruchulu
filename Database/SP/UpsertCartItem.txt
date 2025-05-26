@@ -1,0 +1,66 @@
+﻿
+
+
+CREATE PROCEDURE UpsertCartItem
+    @CartID INT,
+    @UserID INT,
+    @ItemID INT,
+    @CategoryID INT,
+    @ItemCount INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- If ItemCount is 0, delete the cart item if it exists
+    IF @ItemCount = 0
+    BEGIN
+        IF EXISTS (
+            SELECT 1 FROM Cart
+            WHERE CartID = @CartID AND UserID = @UserID
+        )
+        BEGIN
+            DELETE FROM Cart
+            WHERE CartID = @CartID AND UserID = @UserID;
+
+            SELECT 'Item removed from cart.' AS Message, 'Success' AS Status;
+        END
+        ELSE
+        BEGIN
+            SELECT 'Invalid CartID or UserID.' AS Message, 'Error' AS Status;
+        END
+        RETURN;
+    END
+
+    -- If CartID = 0, insert a new item
+    IF @CartID = 0
+    BEGIN
+        INSERT INTO Cart (UserID, ItemID, CategoryID, ItemCount)
+        VALUES (@UserID, @ItemID, @CategoryID, @ItemCount);
+
+        SELECT 'Item added to cart.' AS Message, 'Success' AS Status;
+    END
+    ELSE
+    BEGIN
+        -- Update existing item
+        IF EXISTS (
+            SELECT 1 FROM Cart
+            WHERE CartID = @CartID AND UserID = @UserID
+        )
+        BEGIN
+            UPDATE Cart
+            SET ItemID = @ItemID,
+                CategoryID = @CategoryID,
+                ItemCount = @ItemCount
+            WHERE CartID = @CartID;
+
+            SELECT 'Item updated in cart.' AS Message, 'Success' AS Status;
+        END
+        ELSE
+        BEGIN
+            SELECT 'Invalid CartID or UserID.' AS Message, 'Error' AS Status;
+        END
+    END
+END;
+
+
+

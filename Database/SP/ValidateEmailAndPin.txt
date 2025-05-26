@@ -1,0 +1,29 @@
+﻿
+
+
+
+CREATE PROCEDURE ValidateEmailAndPin
+    @Email NVARCHAR(100),
+    @PIN NVARCHAR(6)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (
+        SELECT 1 
+        FROM Users 
+        WHERE Email = @Email AND PIN = @PIN AND IsActive = 1
+    )
+    BEGIN
+        SELECT *, 'Success' AS Status, 'Email and PIN match and are valid.' AS Message
+        FROM Users 
+        WHERE Email = @Email AND PIN = @PIN AND IsActive = 1;
+    END
+    ELSE
+    BEGIN
+        SELECT 'Failed' AS Status, 'Invalid email or PIN, or user is inactive.' AS Message;
+    END
+END
+
+
+

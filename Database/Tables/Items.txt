@@ -1,0 +1,9 @@
+CREATE TABLE Items (
+    ItemID INT IDENTITY(1,1) PRIMARY KEY,
+    CategoryID INT FOREIGN KEY REFERENCES Categories(CategoryID),
+    ItemName NVARCHAR(255) NOT NULL,
+    ItemDescription NVARCHAR(MAX) NULL,
+    OriginalPrice DECIMAL(10,2) NOT NULL,
+    DiscountPercentage DECIMAL(5,2) NOT NULL,
+    ItemImage NVARCHAR(500) NULL
+);

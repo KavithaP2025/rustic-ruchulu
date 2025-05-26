@@ -1,0 +1,28 @@
+﻿
+
+
+CREATE PROCEDURE GetUserAddress
+    @UserID INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        AddressID,
+        UserID,
+        AddressUserName,
+        AddressPhoneNumber,
+        Pincode,
+        Locality,
+        Address,
+        City,
+        State,
+        IsActive,
+		0 AS IsEdit
+    FROM UserAddress
+    WHERE 
+        (@UserID IS NULL OR UserID = @UserID)
+        AND IsActive = 1;  -- Optional: only return active addresses
+END;
+
+

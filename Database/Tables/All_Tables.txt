@@ -1,0 +1,64 @@
+CREATE TABLE Users (
+    UserID INT IDENTITY(1,1) PRIMARY KEY,
+    UserName NVARCHAR(100) NOT NULL,
+    PhoneNumber NVARCHAR(20),
+    Email NVARCHAR(100) NOT NULL,
+    PIN NVARCHAR(10),
+    IsActive BIT NOT NULL DEFAULT 1
+);
+
+
+CREATE TABLE UserAddress (
+    AddressID INT IDENTITY(1,1) PRIMARY KEY,
+    UserID INT NOT NULL,
+    AddressUserName NVARCHAR(255) NOT NULL,
+    AddressPhoneNumber NVARCHAR(20),
+    Pincode NVARCHAR(20) NOT NULL,
+    Locality NVARCHAR(255) NOT NULL,
+    Address NVARCHAR(255) NOT NULL,
+    City NVARCHAR(100) NOT NULL,
+    State NVARCHAR(100) NOT NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CONSTRAINT FK_UserAddress_User FOREIGN KEY (UserID)
+        REFERENCES Users(UserID)
+);
+
+CREATE TABLE Categories (
+    CategoryID INT IDENTITY(1,1) PRIMARY KEY,
+    CategoryName NVARCHAR(255) NOT NULL,
+    CategoryDescription NVARCHAR(MAX) NULL,
+    CategoryImage NVARCHAR(500) NULL,
+	SortOrder INT,
+    IsActive BIT NOT NULL DEFAULT 1
+);
+
+CREATE TABLE Items (
+    ItemID INT IDENTITY(1,1) PRIMARY KEY,
+    CategoryID INT FOREIGN KEY REFERENCES Categories(CategoryID),
+    ItemName NVARCHAR(255) NOT NULL,
+    ItemDescription NVARCHAR(MAX) NULL,
+    OriginalPrice DECIMAL(10,2) NOT NULL,
+    DiscountPercentage DECIMAL(5,2) NOT NULL,
+    ItemImage NVARCHAR(500) NULL
+);
+
+
+CREATE TABLE Tags (
+    TagID INT IDENTITY(1,1) PRIMARY KEY,
+    TagName NVARCHAR(50) NOT NULL UNIQUE,
+    Quantity DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE ItemTags (
+    ItemTagID INT IDENTITY(1,1) PRIMARY KEY,
+    ItemID INT FOREIGN KEY REFERENCES Items(ItemID) ON DELETE CASCADE,
+    TagID INT FOREIGN KEY REFERENCES Tags(TagID) ON DELETE CASCADE
+);
+
+CREATE TABLE Cart (
+    CartID INT IDENTITY(1,1) PRIMARY KEY,
+	UserID INT,
+	ItemID INT FOREIGN KEY REFERENCES Items(ItemID),
+    CategoryID INT FOREIGN KEY REFERENCES Categories(CategoryID),
+    ItemCount INT
+);

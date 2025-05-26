@@ -1,0 +1,68 @@
+﻿
+
+
+CREATE PROCEDURE UpsertUserAddress
+    @AddressID INT = 0,
+    @UserID INT,
+    @AddressUserName NVARCHAR(255),
+    @AddressPhoneNumber NVARCHAR(20) = NULL,
+    @Pincode NVARCHAR(20),
+    @Locality NVARCHAR(255),
+    @Address NVARCHAR(255),
+    @City NVARCHAR(100),
+    @State NVARCHAR(100),
+    @IsActive BIT = 1
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @AddressID = 0
+    BEGIN
+        -- Insert new address
+        INSERT INTO UserAddress (
+            UserID,
+            AddressUserName,
+            AddressPhoneNumber,
+            Pincode,
+            Locality,
+            Address,
+            City,
+            State,
+            IsActive
+        )
+        VALUES (
+            @UserID,
+            @AddressUserName,
+            @AddressPhoneNumber,
+            @Pincode,
+            @Locality,
+            @Address,
+            @City,
+            @State,
+            @IsActive
+        );
+
+        -- Optionally return the new ID
+        SELECT 'Address added successfully.' AS Message, 'Success' AS Status;
+    END
+    ELSE
+    BEGIN
+        -- Update existing address
+        UPDATE UserAddress
+        SET
+            UserID = @UserID,
+            AddressUserName = @AddressUserName,
+            AddressPhoneNumber = @AddressPhoneNumber,
+            Pincode = @Pincode,
+            Locality = @Locality,
+            Address = @Address,
+            City = @City,
+            State = @State,
+            IsActive = @IsActive
+        WHERE AddressID = @AddressID;
+
+        SELECT 'Address updated successfully.' AS Message, 'Success' AS Status;
+    END
+END;
+
+

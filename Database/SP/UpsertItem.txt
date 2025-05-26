@@ -1,0 +1,63 @@
+﻿Create PROCEDURE UpsertItem
+    @ItemID INT,
+    @CategoryID INT,
+    @ItemName NVARCHAR(200),
+    @ItemDescription NVARCHAR(MAX),
+    @OriginalPrice DECIMAL(18,2),
+    @DiscountPercentage DECIMAL(5,2),
+    @ItemImage NVARCHAR(MAX),
+    @IsActive BIT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (SELECT 1 FROM Items WHERE ItemID = @ItemID)
+    BEGIN
+        -- Update existing record
+        UPDATE Items
+        SET 
+            CategoryID = @CategoryID,
+            ItemName = @ItemName,
+            ItemDescription = @ItemDescription,
+            OriginalPrice = @OriginalPrice,
+            DiscountPercentage = @DiscountPercentage,
+            ItemImage = @ItemImage,
+            IsActive = @IsActive
+        WHERE ItemID = @ItemID;
+
+		SELECT 'Item updated successfully.' AS Message, 'Success' AS Status;
+    END
+    ELSE
+    BEGIN
+        -- Insert new record
+        INSERT INTO Items (
+            CategoryID,
+            ItemName,
+            ItemDescription,
+            OriginalPrice,
+            DiscountPercentage,
+            ItemImage,
+            IsActive
+        )
+        VALUES (
+            @CategoryID,
+            @ItemName,
+            @ItemDescription,
+            @OriginalPrice,
+            @DiscountPercentage,
+            @ItemImage,
+            @IsActive
+        );
+
+		SELECT 'Item created successfully.' AS Message, 'Success' AS Status;
+        -- Optionally set ItemID if it's an identity column and you want to return it
+        -- SELECT SCOPE_IDENTITY() AS NewItemID;
+    END
+
+    -- Optionally return the affected row
+    SELECT * FROM Items WHERE ItemID = 
+        CASE 
+            WHEN @ItemID IN (SELECT ItemID FROM Items) THEN @ItemID
+            ELSE SCOPE_IDENTITY()
+        END;
+END

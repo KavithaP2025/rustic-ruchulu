@@ -1,0 +1,71 @@
+
+
+
+CREATE PROCEDURE InsertOrUpdateUserAddress
+    @AddressID INT = 0,
+    @UserID INT,
+    @AddressUserName NVARCHAR(255),
+    @AddressPhoneNumber NVARCHAR(20) = NULL,
+    @Pincode NVARCHAR(20),
+    @Locality NVARCHAR(255),
+    @Address NVARCHAR(255),
+    @City NVARCHAR(100),
+    @State NVARCHAR(100),
+    @IsActive BIT = 1
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @AddressID = 0
+    BEGIN
+        -- Manually calculate AddressID
+        DECLARE @NewAddressID INT;
+        SELECT @NewAddressID = ISNULL(MAX(AddressID), 0) + 1 FROM UserAddress;
+
+        -- Insert new address with calculated AddressID
+        INSERT INTO UserAddress (
+            AddressID,
+            UserID,
+            AddressUserName,
+            AddressPhoneNumber,
+            Pincode,
+            Locality,
+            Address,
+            City,
+            State,
+            IsActive
+        )
+        VALUES (
+            @NewAddressID,
+            @UserID,
+            @AddressUserName,
+            @AddressPhoneNumber,
+            @Pincode,
+            @Locality,
+            @Address,
+            @City,
+            @State,
+            @IsActive
+        );
+
+        SELECT @NewAddressID AS NewAddressID;
+    END
+    ELSE
+    BEGIN
+        -- Update existing address
+        UPDATE UserAddress
+        SET
+            UserID = @UserID,
+            AddressUserName = @AddressUserName,
+            AddressPhoneNumber = @AddressPhoneNumber,
+            Pincode = @Pincode,
+            Locality = @Locality,
+            Address = @Address,
+            City = @City,
+            State = @State,
+            IsActive = @IsActive
+        WHERE AddressID = @AddressID;
+
+		SELECT 'Address saved successfully.' AS Message, 'Success' AS Status;
+    END
+END;

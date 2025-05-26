@@ -1,0 +1,52 @@
+﻿
+
+
+CREATE PROCEDURE CheckEmailAndGenerateCode
+    @Email NVARCHAR(100)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @UserID INT;
+	DECLARE @UserName NVARCHAR(100);
+    DECLARE @GeneratedPIN NVARCHAR(6);
+    DECLARE @IsUnique BIT = 0;
+
+    -- Step 1: Get the UserID if email exists
+    SELECT @UserID = UserID, @UserName = UserName FROM Users WHERE Email = @Email;
+
+    IF @UserID IS NOT NULL
+    BEGIN
+        -- Step 2: Generate unique 6-character alphanumeric string
+        WHILE @IsUnique = 0
+        BEGIN
+            SET @GeneratedPIN = 
+                CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) +
+                CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) +
+                CHAR(48 + ABS(CHECKSUM(NEWID())) % 10) +
+                CHAR(48 + ABS(CHECKSUM(NEWID())) % 10) +
+                CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) +
+                CHAR(65 + ABS(CHECKSUM(NEWID())) % 26);
+
+            IF NOT EXISTS (SELECT 1 FROM Users WHERE PIN = @GeneratedPIN)
+            BEGIN
+                SET @IsUnique = 1;
+            END
+        END
+
+        -- Step 3: Update the PIN in the Users table
+        UPDATE Users
+        SET PIN = @GeneratedPIN
+        WHERE UserID = @UserID;
+
+        -- Step 4: Return success with code
+        SELECT 'Success' AS Status, @GeneratedPIN AS Code, @UserName AS UserName;
+    END
+    ELSE
+    BEGIN
+        SELECT 'Failed' AS Status, 'Email does not exist' AS Message;
+    END
+END
+
+
+

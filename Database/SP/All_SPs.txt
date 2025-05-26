@@ -1,0 +1,402 @@
+﻿
+
+
+CREATE PROCEDURE CheckEmailAndGenerateCode
+    @Email NVARCHAR(100)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @UserID INT;
+	DECLARE @UserName NVARCHAR(100);
+    DECLARE @GeneratedPIN NVARCHAR(6);
+    DECLARE @IsUnique BIT = 0;
+
+    -- Step 1: Get the UserID if email exists
+    SELECT @UserID = UserID, @UserName = UserName FROM Users WHERE Email = @Email;
+
+    IF @UserID IS NOT NULL
+    BEGIN
+        -- Step 2: Generate unique 6-character alphanumeric string
+        WHILE @IsUnique = 0
+        BEGIN
+            SET @GeneratedPIN = 
+                CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) +
+                CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) +
+                CHAR(48 + ABS(CHECKSUM(NEWID())) % 10) +
+                CHAR(48 + ABS(CHECKSUM(NEWID())) % 10) +
+                CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) +
+                CHAR(65 + ABS(CHECKSUM(NEWID())) % 26);
+
+            IF NOT EXISTS (SELECT 1 FROM Users WHERE PIN = @GeneratedPIN)
+            BEGIN
+                SET @IsUnique = 1;
+            END
+        END
+
+        -- Step 3: Update the PIN in the Users table
+        UPDATE Users
+        SET PIN = @GeneratedPIN
+        WHERE UserID = @UserID;
+
+        -- Step 4: Return success with code
+        SELECT 'Success' AS Status, @GeneratedPIN AS Code, @UserName AS UserName;
+    END
+    ELSE
+    BEGIN
+        SELECT 'Failed' AS Status, 'Email does not exist' AS Message;
+    END
+END
+
+
+
+﻿
+
+
+CREATE PROCEDURE DeleteUserAddress
+    @AddressID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Check if the AddressID exists
+    IF EXISTS (SELECT 1 FROM UserAddress WHERE AddressID = @AddressID)
+    BEGIN
+        DELETE FROM UserAddress
+        WHERE AddressID = @AddressID;
+
+        SELECT 'Address deleted successfully.' AS Message, 'Success' AS Status;
+    END
+    ELSE
+    BEGIN
+        SELECT 'Address not found.' AS Message, 'Warning' AS Status;
+    END
+END;
+
+
+﻿
+
+CREATE PROCEDURE GetCartItemsByUser
+    @UserID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        i.ItemID,
+        i.CategoryID,
+        i.ItemName,
+        i.ItemDescription,
+        i.OriginalPrice,
+        i.DiscountPercentage,
+        i.ItemImage,
+        c.ItemCount
+    FROM Cart c
+    INNER JOIN Items i ON c.ItemID = i.ItemID
+    WHERE c.UserID = @UserID;
+END;
+
+
+
+CREATE PROCEDURE GetItemsByCategory
+    @UserID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        c.CategoryID, 
+        c.CategoryName,
+        c.CategoryDescription,
+        c.CategoryImage,
+        c.SortOrder,
+        i.ItemID, 
+        i.ItemName,
+        i.ItemDescription,
+        i.OriginalPrice,
+        i.DiscountPercentage,
+        i.ItemImage,
+        ISNULL(cart.ItemCount, 0) AS ItemCount
+    FROM Categories c
+    INNER JOIN Items i ON c.CategoryID = i.CategoryID
+    LEFT JOIN Cart cart ON cart.ItemID = i.ItemID 
+    AND cart.CategoryID = c.CategoryID 
+    AND cart.UserID = @UserID;
+
+
+	SELECT 
+        it.ItemTagID, 
+        it.ItemID, 
+        t.TagID, 
+        t.TagName, 
+        t.Quantity,
+		0 AS Active
+    FROM ItemTags it
+    INNER JOIN Tags t ON it.TagID = t.TagID;
+END;
+
+
+
+﻿
+
+
+CREATE PROCEDURE GetUserAddress
+    @UserID INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        AddressID,
+        UserID,
+        AddressUserName,
+        AddressPhoneNumber,
+        Pincode,
+        Locality,
+        Address,
+        City,
+        State,
+        IsActive,
+		0 AS IsEdit
+    FROM UserAddress
+    WHERE 
+        (@UserID IS NULL OR UserID = @UserID)
+        AND IsActive = 1;  -- Optional: only return active addresses
+END;
+
+
+
+
+
+CREATE PROCEDURE InsertOrUpdateUserAddress
+    @AddressID INT = 0,
+    @UserID INT,
+    @AddressUserName NVARCHAR(255),
+    @AddressPhoneNumber NVARCHAR(20) = NULL,
+    @Pincode NVARCHAR(20),
+    @Locality NVARCHAR(255),
+    @Address NVARCHAR(255),
+    @City NVARCHAR(100),
+    @State NVARCHAR(100),
+    @IsActive BIT = 1
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @AddressID = 0
+    BEGIN
+        -- Manually calculate AddressID
+        DECLARE @NewAddressID INT;
+        SELECT @NewAddressID = ISNULL(MAX(AddressID), 0) + 1 FROM UserAddress;
+
+        -- Insert new address with calculated AddressID
+        INSERT INTO UserAddress (
+            AddressID,
+            UserID,
+            AddressUserName,
+            AddressPhoneNumber,
+            Pincode,
+            Locality,
+            Address,
+            City,
+            State,
+            IsActive
+        )
+        VALUES (
+            @NewAddressID,
+            @UserID,
+            @AddressUserName,
+            @AddressPhoneNumber,
+            @Pincode,
+            @Locality,
+            @Address,
+            @City,
+            @State,
+            @IsActive
+        );
+
+        SELECT @NewAddressID AS NewAddressID;
+    END
+    ELSE
+    BEGIN
+        -- Update existing address
+        UPDATE UserAddress
+        SET
+            UserID = @UserID,
+            AddressUserName = @AddressUserName,
+            AddressPhoneNumber = @AddressPhoneNumber,
+            Pincode = @Pincode,
+            Locality = @Locality,
+            Address = @Address,
+            City = @City,
+            State = @State,
+            IsActive = @IsActive
+        WHERE AddressID = @AddressID;
+
+		SELECT 'Address saved successfully.' AS Message, 'Success' AS Status;
+    END
+END;
+﻿
+
+
+CREATE PROCEDURE [dbo].[UpsertCartItem]
+    @CartID INT,
+    @UserID INT,
+    @ItemID INT,
+    @CategoryID INT,
+    @ItemCount INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- If ItemCount is 0, delete the cart item if it exists
+    IF @ItemCount = 0
+    BEGIN
+        IF EXISTS (
+            SELECT 1 FROM Cart
+            WHERE CartID = @CartID AND UserID = @UserID
+        )
+        BEGIN
+            DELETE FROM Cart
+            WHERE CartID = @CartID AND UserID = @UserID;
+
+            SELECT 'Item removed from cart.' AS Message, 'Success' AS Status;
+        END
+        ELSE
+        BEGIN
+            SELECT 'Invalid CartID or UserID.' AS Message, 'Error' AS Status;
+        END
+        RETURN;
+    END
+
+    -- If CartID = 0, insert a new item
+    IF @CartID = 0
+    BEGIN
+        INSERT INTO Cart (UserID, ItemID, CategoryID, ItemCount)
+        VALUES (@UserID, @ItemID, @CategoryID, @ItemCount);
+
+        SELECT 'Item added to cart.' AS Message, 'Success' AS Status;
+    END
+    ELSE
+    BEGIN
+        -- Update existing item
+        IF EXISTS (
+            SELECT 1 FROM Cart
+            WHERE CartID = @CartID AND UserID = @UserID
+        )
+        BEGIN
+            UPDATE Cart
+            SET ItemID = @ItemID,
+                CategoryID = @CategoryID,
+                ItemCount = @ItemCount
+            WHERE CartID = @CartID;
+
+            SELECT 'Item updated in cart.' AS Message, 'Success' AS Status;
+        END
+        ELSE
+        BEGIN
+            SELECT 'Invalid CartID or UserID.' AS Message, 'Error' AS Status;
+        END
+    END
+END;
+
+
+
+﻿
+
+
+CREATE PROCEDURE UpsertUserAddress
+    @AddressID INT = 0,
+    @UserID INT,
+    @AddressUserName NVARCHAR(255),
+    @AddressPhoneNumber NVARCHAR(20) = NULL,
+    @Pincode NVARCHAR(20),
+    @Locality NVARCHAR(255),
+    @Address NVARCHAR(255),
+    @City NVARCHAR(100),
+    @State NVARCHAR(100),
+    @IsActive BIT = 1
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @AddressID = 0
+    BEGIN
+        -- Insert new address
+        INSERT INTO UserAddress (
+            UserID,
+            AddressUserName,
+            AddressPhoneNumber,
+            Pincode,
+            Locality,
+            Address,
+            City,
+            State,
+            IsActive
+        )
+        VALUES (
+            @UserID,
+            @AddressUserName,
+            @AddressPhoneNumber,
+            @Pincode,
+            @Locality,
+            @Address,
+            @City,
+            @State,
+            @IsActive
+        );
+
+        -- Optionally return the new ID
+        SELECT 'Address added successfully.' AS Message, 'Success' AS Status;
+    END
+    ELSE
+    BEGIN
+        -- Update existing address
+        UPDATE UserAddress
+        SET
+            UserID = @UserID,
+            AddressUserName = @AddressUserName,
+            AddressPhoneNumber = @AddressPhoneNumber,
+            Pincode = @Pincode,
+            Locality = @Locality,
+            Address = @Address,
+            City = @City,
+            State = @State,
+            IsActive = @IsActive
+        WHERE AddressID = @AddressID;
+
+        SELECT 'Address updated successfully.' AS Message, 'Success' AS Status;
+    END
+END;
+
+
+﻿
+
+
+
+CREATE PROCEDURE ValidateEmailAndPin
+    @Email NVARCHAR(100),
+    @PIN NVARCHAR(6)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (
+        SELECT 1 
+        FROM Users 
+        WHERE Email = @Email AND PIN = @PIN AND IsActive = 1
+    )
+    BEGIN
+        SELECT *, 'Success' AS Status, 'Email and PIN match and are valid.' AS Message
+        FROM Users 
+        WHERE Email = @Email AND PIN = @PIN AND IsActive = 1;
+    END
+    ELSE
+    BEGIN
+        SELECT 'Failed' AS Status, 'Invalid email or PIN, or user is inactive.' AS Message;
+    END
+END
+
+
+
+

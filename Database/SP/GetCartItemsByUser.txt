@@ -1,0 +1,29 @@
+﻿
+
+
+
+
+CREATE PROCEDURE GetCartItemsByUser
+    @UserID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+		c.CartID,
+        i.ItemID,
+        i.CategoryID,
+        i.ItemName,
+        i.ItemDescription,
+        i.OriginalPrice,
+        i.DiscountPercentage,
+        i.ItemImage,
+        c.ItemCount,
+		(i.OriginalPrice * (1 - i.DiscountPercentage / 100.0)) AS WithDiscountItemPrice,
+		(i.OriginalPrice * c.ItemCount * (1 - i.DiscountPercentage / 100.0)) AS TotalPrice
+    FROM Cart c
+    INNER JOIN Items i ON c.ItemID = i.ItemID
+    WHERE c.UserID = @UserID;
+END;
+
+

@@ -1,0 +1,8 @@
+CREATE TABLE Categories (
+    CategoryID INT IDENTITY(1,1) PRIMARY KEY,
+    CategoryName NVARCHAR(255) NOT NULL,
+    CategoryDescription NVARCHAR(MAX) NULL,
+    CategoryImage NVARCHAR(500) NULL,
+	SortOrder INT,
+    IsActive BIT NOT NULL DEFAULT 1
+);
