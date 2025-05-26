@@ -1,0 +1,287 @@
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5105E7E6-DB42-4E45-994D-339DBED27227}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RusticRuchulu</RootNamespace>
+    <AssemblyName>RusticRuchulu</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44315</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="address.aspx" />
+    <Content Include="adminCategory.aspx" />
+    <Content Include="adminItems.aspx" />
+    <Content Include="cart.aspx" />
+    <Content Include="categories.aspx" />
+    <Content Include="css\animate.min.css" />
+    <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\datepicker.css" />
+    <Content Include="css\font-awesome.min.css" />
+    <Content Include="css\icofont.css" />
+    <Content Include="css\magnific-popup.css" />
+    <Content Include="css\nice-select.css" />
+    <Content Include="css\normalize.css" />
+    <Content Include="css\owl-carousel.css" />
+    <Content Include="css\responsive.css" />
+    <Content Include="css\slicknav.min.css" />
+    <Content Include="Database\SampleData.txt" />
+    <Content Include="Database\SP\GetCartItemsByUser.txt" />
+    <Content Include="Database\SP\GetCategories.txt" />
+    <Content Include="Database\SP\UpsertCartItem.txt" />
+    <Content Include="Database\SP\CheckEmailAndGenerateCode.txt" />
+    <Content Include="Database\SP\DeleteUserAddress.txt" />
+    <Content Include="Database\SP\GetUserAddress.txt" />
+    <Content Include="Database\SP\GetItemsByCategory.txt" />
+    <Content Include="Database\SP\InsertNewUser.txt" />
+    <Content Include="Database\SP\UpsertCategory.txt" />
+    <Content Include="Database\SP\UpsertItem.txt" />
+    <Content Include="Database\SP\UpsertUserAddress.txt" />
+    <Content Include="Database\SP\ValidateEmailAndPin.txt" />
+    <Content Include="Database\Tables\Cart.txt" />
+    <Content Include="Database\Tables\Categories.txt" />
+    <Content Include="Database\Tables\Items.txt" />
+    <Content Include="Database\Tables\ItemTags.txt" />
+    <Content Include="Database\Tables\Tags.txt" />
+    <Content Include="Database\Tables\UserAddress.txt" />
+    <Content Include="Database\Tables\Users.txt" />
+    <Content Include="Data\items.js" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="fonts\icofont.svg" />
+    <Content Include="img\almond.jpg" />
+    <Content Include="img\Animation.gif" />
+    <Content Include="img\cashew.jpg" />
+    <Content Include="img\dryfruit.png" />
+    <Content Include="img\FullStar.png" />
+    <Content Include="img\HalfStar.png" />
+    <Content Include="img\heading-img_1.png" />
+    <Content Include="img\map-marker.png" />
+    <Content Include="img\parallax2.jpg" />
+    <Content Include="img\pista.jpg" />
+    <Content Include="img\raisins.jpg" />
+    <Content Include="img\w1.jpg" />
+    <Content Include="img\w2.jpg" />
+    <Content Include="img\w3.jpg" />
+    <Content Include="index.aspx" />
+    <Content Include="js\angular.min.js" />
+    <Content Include="js\b.js" />
+    <Content Include="js\bootstrap-datepicker.js" />
+    <Content Include="js\bootstrap.min.js" />
+    <Content Include="js\c.js" />
+    <Content Include="js\colors.js" />
+    <Content Include="js\easing.js" />
+    <Content Include="js\gmaps.min.js" />
+    <Content Include="js\isotope.pkgd.min.js" />
+    <Content Include="js\jquery-migrate-3.0.0.js" />
+    <Content Include="js\jquery-ui.min.js" />
+    <Content Include="js\jquery.counterup.min.js" />
+    <Content Include="js\jquery.magnific-popup.min.js" />
+    <Content Include="js\jquery.min.js" />
+    <Content Include="js\jquery.nav.js" />
+    <Content Include="js\jquery.scrollUp.min.js" />
+    <Content Include="js\jquery.sticky.js" />
+    <Content Include="js\main.js" />
+    <Content Include="js\map-active.js" />
+    <Content Include="js\masonry.pkgd.min.js" />
+    <Content Include="js\niceselect.js" />
+    <Content Include="js\owl-carousel.js" />
+    <Content Include="js\popper.min.js" />
+    <Content Include="js\sidenav.js" />
+    <Content Include="js\slicknav.min.js" />
+    <Content Include="js\steller.js" />
+    <Content Include="js\tilt.jquery.min.js" />
+    <Content Include="js\wow.min.js" />
+    <Content Include="login.aspx" />
+    <Content Include="register.aspx" />
+    <Content Include="scripts\registerPage.js" />
+    <Content Include="scripts\loginPage.js" />
+    <Content Include="scripts\indexPage.js" />
+    <Content Include="scripts\myScript.js" />
+    <Content Include="scripts\categoriesPage.js" />
+    <Content Include="style.css" />
+    <Content Include="Web.config" />
+    <Content Include="wwwroot\Templates\Send_OTP_Template.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="address.aspx.cs">
+      <DependentUpon>address.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="address.aspx.designer.cs">
+      <DependentUpon>address.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="adminCategory.aspx.cs">
+      <DependentUpon>adminCategory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="adminCategory.aspx.designer.cs">
+      <DependentUpon>adminCategory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="adminItems.aspx.cs">
+      <DependentUpon>adminItems.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="adminItems.aspx.designer.cs">
+      <DependentUpon>adminItems.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="cart.aspx.cs">
+      <DependentUpon>cart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="cart.aspx.designer.cs">
+      <DependentUpon>cart.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="categories.aspx.cs">
+      <DependentUpon>categories.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="categories.aspx.designer.cs">
+      <DependentUpon>categories.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmailHelper.cs" />
+    <Compile Include="index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="register.aspx.cs">
+      <DependentUpon>register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="register.aspx.designer.cs">
+      <DependentUpon>register.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\GloriousFont\GLORIOUS.otf" />
+    <Content Include="fonts\icofont.eot" />
+    <Content Include="fonts\icofont.ttf" />
+    <Content Include="fonts\icofont.woff" />
+    <Content Include="fonts\icofont.woff2" />
+    <Content Include="img\slider1.webp" />
+    <Content Include="img\slider2.webp" />
+    <Content Include="img\slider3.webp" />
+    <None Include="packages.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>57476</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44315/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
